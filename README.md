@@ -2,7 +2,7 @@
 
 A Phoenix LiveView application that uses LiveStream to implement a real-time chatting feature.
 
-## Getting Startged
+## Getting Started
 
 To start your Phoenix server:
 
