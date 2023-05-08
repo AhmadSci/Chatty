@@ -1,8 +1,6 @@
-# StreamChat
+# Chatty
 
-A Phoenix LiveView application that uses LiveStream to implement a real-time chatting feature. This app is a companion to my blog post on this topic, which you can find [here](#TBD).
-
-The completed code can be found on the main branch. To follow along with the blog post, checkout the `start` branch.
+A Phoenix LiveView application that uses LiveStream to implement a real-time chatting feature.
 
 ## Getting Startged
 
