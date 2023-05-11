@@ -10,7 +10,7 @@ defmodule StreamChatWeb.PageController do
     else
       # redrect to the chat page
       conn
-      |> put_flash(:info, "Welcome to Stream Chat!")
+      |> put_flash(:info, "Welcome to Chatty!")
       |> redirect(to: ~p"/rooms")
     end
   end

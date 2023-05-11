@@ -19,7 +19,7 @@ defmodule StreamChatWeb.ChatLive.Message.Form do
 
   def render(assigns) do
     ~H"""
-    <div>
+    <div style = "margin-top:1rem">
       <.simple_form
         :let={f}
         for={@changeset}
@@ -33,20 +33,23 @@ defmodule StreamChatWeb.ChatLive.Message.Form do
           phx-key="ArrowUp"
           phx-focus="unpin_scrollbar_from_top"
           field={{f, :content}}
-          style = "background-color:transparent; border: 1px solid #0D7377; color :white"
+          style = "background-color:transparent; border: 1px solid #0D7377; color :white; margin:0"
+          id = "message_input"
+          label = "none"
         />
-
-        <div phx-drop-target="{@uploads.attachment.ref}" style = "color:white; display:flex">
+        <label id="attach-label" for="inputTag" style = "margin:0 1rem 0 1rem">
+          <img id = {"attach-img#{@room_id}"} src={~p"/images/attach-file.png"} width="40" style = "max-width:fit-content; filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(265deg) brightness(115%) contrast(108%);" />
           <.live_file_input upload={@uploads.attachment} />
-          <div style = "max-width:100px; display:flex; column-gap:1rem">
-            <%= for entry <- @uploads.attachment.entries do %>
-              <.live_img_preview entry={entry} />
-            <% end %>
-          </div>
-        </div>
-        <:actions>
-          <.button>send</.button>
-        </:actions>
+        </label>
+        <script>
+
+          document.getElementById("attach-img<%= @room_id %>").addEventListener('click', function() {
+              document.getElementsByName('attachment')[0].click();
+          });
+        </script>
+          <button style = "margin:0">
+            <img src={~p"/images/send.png"} width="40" style = "max-width:fit-content; filter: invert(24%) sepia(66%) saturate(2178%) hue-rotate(159deg) brightness(96%) contrast(90%);" />
+          </button>
       </.simple_form>
     </div>
     """

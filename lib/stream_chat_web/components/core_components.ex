@@ -191,12 +191,21 @@ defmodule StreamChatWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest} >
-      <div class="space-y-8 bg-white" style = "background-color:#212121">
-        <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
-        </div>
+    <%= if String.contains? Kernel.inspect(@as), "user" do %>
+      <div class="space-y-8 bg-white" style = "background-color:#212121;">
+      <%= render_slot(@inner_block, f) %>
+      <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <%= render_slot(action, f) %>
       </div>
+    </div>
+      <% else %>
+      <div class="space-y-8 bg-white" style = "background-color:#212121;" id ="message-containter">
+      <%= render_slot(@inner_block, f) %>
+      <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <%= render_slot(action, f) %>
+      </div>
+    </div>
+      <% end %>
     </.form>
     """
   end
@@ -217,7 +226,7 @@ defmodule StreamChatWeb.CoreComponents do
 
   def button(assigns) do
     ~H"""
-    <button style="background-color:#0D7377"
+    <button style="background-color:#0D7377;"
       type={@type}
       class={[
         "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
@@ -318,7 +327,10 @@ defmodule StreamChatWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
+    // check if the label is empty
+    <%= if @label != "none" do %>
       <.label for={@id}><%= @label %></.label>
+    <% end %>
       <textarea
         id={@id || @name}
         name={@name}
@@ -340,7 +352,9 @@ defmodule StreamChatWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
+    <%= if @label != "none" do %>
       <.label for={@id}><%= @label %></.label>
+    <% end %>
       <input
         type={@type}
         name={@name}

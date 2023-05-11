@@ -6,6 +6,7 @@
 
 body {
     background-color: #212121;
+    font-family: 'Poppins';font-size: 22px;
 }
 
 /* width */
@@ -28,3 +29,26 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  #message-containter{
+    display: grid;
+    grid-template-columns: 4fr fit-content(100px) fit-content(100px);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+
+  input[type=file]{
+    display:none
+  }
+
+  #attach-label{
+    cursor: pointer;
+  }
+
+@media screen and (max-width: 950px) {
+
+  #messages {
+    padding:0 !important
+  }
+  
+}

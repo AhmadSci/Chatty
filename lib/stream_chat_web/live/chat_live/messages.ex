@@ -8,7 +8,7 @@ defmodule StreamChatWeb.ChatLive.Messages do
       id="messages"
       phx-update="stream"
       class="overflow-scroll"
-      style="height: calc(82vh - 10rem); padding: 15% 15% 0 15%; overflow-x: hidden;"
+      style="height: calc(84vh); padding: 0 15% 0 15%; overflow-x: hidden;"
       phx-hook="ScrollDown"
       data-scrolled-to-top={@scrolled_to_top}
     >
@@ -20,7 +20,7 @@ defmodule StreamChatWeb.ChatLive.Messages do
         phx-hook="Hover"
         data-toggle={JS.toggle(to: "#message-#{message.id}-buttons")}
       >
-        <div style = {"max-width:fit-content;"}>
+        <div style = {"min-width:50%; max-width: 80%"}>
           <.message_details message={message} sender_id={@sender_id}/>
         </div>
       </div>
@@ -37,45 +37,48 @@ defmodule StreamChatWeb.ChatLive.Messages do
 
   def message_meta(assigns) do
     ~H"""
-    <dl style = {"background-color:#282828; padding:1rem; border-radius:2rem 2rem 0 0;#{if @sender_id === @message.sender.id, do: "background-color:#0D7377; display:flex; justify-content:flex-end; width:100%;"}"} class="-my-4 divide-y divide-zinc-100">
-      <div class="flex gap-4 sm:gap-2">
+    <dl style = {"background-color:#282828; padding:1rem; border-radius:2rem 2rem 0 0;#{if @sender_id === @message.sender.id, do: "background-color:#0D7377; display:flex; justify-content:flex-start; width:100%;"}"} class="-my-4 divide-y divide-zinc-100">
+      <div class="flex gap-4 sm:gap-2" >
       <%= if @sender_id === @message.sender.id do %>
-        <.delete_icon id={"message-#{@message.id}-buttons"} phx_click="delete_message" value={@message.id} />
-        <dt class="w-1/8 flex-none text-[0.9rem] leading-8 text-zinc-500" style="font-weight: 900">
-        </dt>
-        <.user_icon />
+      <dt class="w-1/8 flex-none text-[0.9rem] leading-8 text-zinc-500" style="font-weight: 900;">
+      <p style = "color:#323232;">You</p>
+      </dt>
+      <.delete_icon id={"message-#{@message.id}-buttons"} phx_click="delete_message" value={@message.id} />
       <% else %>
-        <.user_icon />
-        <dt class="w-1/8 flex-none text-[0.9rem] leading-8 text-zinc-500" style="font-weight: 900">
-          <p style = "color:white;"><%= @message.sender.email %></p>
-        </dt>
-      <% end %>
-      <%= if @message.attachment do %>
 
-      <img
-      alt="" width="200" height="200"
-      src={~s"#{@message.attachment}"}>
-
+      <dt class="w-1/8 flex-none text-[0.9rem] leading-8 text-zinc-500" style="font-weight: 900">
+      <p style = "color:#0D7377;"><%= @message.sender.username %></p>
+      </dt>
       <% end %>
 
       </div>
       </dl>
+        <%= if @message.attachment do %>
+        <div  style = {"background-color:#282828; width:100%;#{if @sender_id === @message.sender.id , do: "background-color:#0D7377; direction:rtl;"}"}>
+
+          <img alt="" width="200" height="200" src={~s"#{@message.attachment}"}>
+
+        </div>
+        <% end %>
     """
   end
 
   def message_content(assigns) do
     ~H"""
     <dl style = {" background-color:#282828;border-radius:0 0 2rem 2rem; #{if @sender_id === @message.sender.id, do: "background-color:#0D7377; display:flex; justify-content:flex-end; width:100%;"}"} class="-my-4 divide-y divide-zinc-100">
-      <div class="flex gap-4 py-4 sm:gap-2" style = "display:flex; flex-direction:column">
+      <div class="flex gap-4 py-4 sm:gap-2" style = "display:flex; flex-direction:column; width:100%">
 
         <dd class="text-sm leading-10 text-zinc-700" style = "padding : 0 2rem 0 2rem;">
+
         <%= if @message.content =~ ~r{^https?://} do %>
-          <a style = {"color:lightblue; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"} href = {@message.content}><%= @message.content %> </a>
+          <p>
+          <a target="_blank" style = {"color:lightblue; font-size:15pt; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"} href = {@message.content}><%= @message.content %> </a>
+          </p>
         <% else %>
-          <p style = {"color:white; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"}><%= @message.content %></p>
+          <p style = {"color:white; font-size:15pt; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"}><%= @message.content %></p>
         <% end %>
           </dd>
-          <span style="font-weight: 300; color:white; padding : 0 2rem 0 2rem;">[<%= @message.inserted_at %>]</span>
+          <span style={"font-weight: 300; font-size:10pt; color:white;direction:rtl; padding : 0 2rem 0 2rem; #{if @sender_id === @message.sender.id, do: "direction:ltr;"}"}><%= String.slice(Kernel.inspect(@message.inserted_at), 15..String.length(Kernel.inspect(@message.inserted_at))-5) %></span>
       </div>
     </dl>
     """
