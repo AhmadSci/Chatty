@@ -8,6 +8,7 @@ defmodule StreamChat.Chat.Message do
     field :content, :string
     belongs_to :room, Room
     belongs_to :sender, User
+    field :attachment, :string
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule StreamChat.Chat.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:content, :sender_id, :room_id])
+    |> cast(attrs, [:content, :sender_id, :room_id, :attachment])
     |> validate_required([:content, :sender_id, :room_id])
   end
 end

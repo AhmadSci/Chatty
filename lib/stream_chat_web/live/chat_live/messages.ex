@@ -8,7 +8,7 @@ defmodule StreamChatWeb.ChatLive.Messages do
       id="messages"
       phx-update="stream"
       class="overflow-scroll"
-      style="height: calc(93vh - 10rem); padding: 15% 15% 0 15%; overflow-x: hidden;"
+      style="height: calc(82vh - 10rem); padding: 15% 15% 0 15%; overflow-x: hidden;"
       phx-hook="ScrollDown"
       data-scrolled-to-top={@scrolled_to_top}
     >
@@ -50,8 +50,16 @@ defmodule StreamChatWeb.ChatLive.Messages do
           <p style = "color:white;"><%= @message.sender.email %></p>
         </dt>
       <% end %>
+      <%= if @message.attachment do %>
+
+      <img
+      alt="" width="200" height="200"
+      src={~s"#{@message.attachment}"}>
+
+      <% end %>
+
       </div>
-    </dl>
+      </dl>
     """
   end
 
@@ -59,8 +67,13 @@ defmodule StreamChatWeb.ChatLive.Messages do
     ~H"""
     <dl style = {" background-color:#282828;border-radius:0 0 2rem 2rem; #{if @sender_id === @message.sender.id, do: "background-color:#0D7377; display:flex; justify-content:flex-end; width:100%;"}"} class="-my-4 divide-y divide-zinc-100">
       <div class="flex gap-4 py-4 sm:gap-2" style = "display:flex; flex-direction:column">
+
         <dd class="text-sm leading-10 text-zinc-700" style = "padding : 0 2rem 0 2rem;">
-        <p style = {"color:white; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"}><%= @message.content %></p>
+        <%= if @message.content =~ ~r{^https?://} do %>
+          <a style = {"color:lightblue; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"} href = {@message.content}><%= @message.content %> </a>
+        <% else %>
+          <p style = {"color:white; #{if @sender_id === @message.sender.id, do: "direction:rtl;"}"}><%= @message.content %></p>
+        <% end %>
           </dd>
           <span style="font-weight: 300; color:white; padding : 0 2rem 0 2rem;">[<%= @message.inserted_at %>]</span>
       </div>
