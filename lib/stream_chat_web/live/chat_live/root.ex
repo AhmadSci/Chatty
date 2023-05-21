@@ -42,11 +42,16 @@ defmodule StreamChatWeb.ChatLive.Root do
   def handle_event("load_more", _params, socket) do
     messages = Chat.get_previous_n_messages(socket.assigns.oldest_message_id, 5)
 
-    {:noreply,
-     socket
-     |> stream_batch_insert(:messages, messages, at: 0)
-     |> assign_oldest_message_id(List.last(messages))
-     |> assign_scrolled_to_top("true")}
+    # check if there are more messages to load
+    if length(messages) == 0 do
+      {:noreply, socket}
+    else
+      {:noreply,
+        socket
+        |> stream_batch_insert(:messages, messages, at: 0)
+        |> assign_oldest_message_id(List.last(messages))
+        |> assign_scrolled_to_top("true")}
+    end
   end
 
   def handle_event("unpin_scrollbar_from_top", _params, socket) do

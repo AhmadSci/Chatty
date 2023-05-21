@@ -514,7 +514,7 @@ defmodule StreamChatWeb.CoreComponents do
     attr :title, :string, required: true
   end
 
-  def list(assigns) do
+  def list(assigns) do #HEEx components
     ~H"""
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
